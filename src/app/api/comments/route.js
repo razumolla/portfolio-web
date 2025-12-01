@@ -1,51 +1,52 @@
-// GET/POST -> Strapi comments
-// We don’t want to expose Strapi tokens in the browser, so we use a Next route handler.
+// app/api/comments/route.js
 import { NextResponse } from "next/server";
+import { getCommentsForArticle, createComment } from "@/lib/strapi/comments";
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
-const STRAPI_TOKEN = process.env.STRAPI_TOKEN; // create one in Strapi (API token with Comment create permission)
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const articleId = searchParams.get("articleId"); // this is article.documentId
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const articleId = searchParams.get("articleId");
+    if (!articleId) {
+      return NextResponse.json({ data: [] });
+    }
 
-  if (!articleId) {
-    return NextResponse.json({ data: [] });
+    const comments = await getCommentsForArticle(articleId);
+
+    return NextResponse.json(comments);
+  } catch (err) {
+    console.error("Comments GET error:", err);
+    return NextResponse.json(
+      { error: "Failed to load comments" },
+      { status: 500 }
+    );
   }
-
-  const url = new URL("/api/comments", STRAPI_URL);
-  url.searchParams.set("filters[article][id][$eq]", articleId);
-  url.searchParams.set("filters[parent][id][$null]", "true");
-  url.searchParams.set("populate", "children");
-  url.searchParams.set("sort", "createdAt:asc");
-
-  const res = await fetch(url.toString(), {
-    headers: {
-      Authorization: `Bearer ${STRAPI_TOKEN}`,
-    },
-  });
-
-  const data = await res.json();
-  return NextResponse.json(data);
 }
 
-export async function POST(req) {
-  const body = await req.json();
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { title, article, author } = body;
 
-  const res = await fetch(`${STRAPI_URL}/api/comments`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${STRAPI_TOKEN}`,
-    },
-    body: JSON.stringify({ data: body }),
-  });
+    if (!title || !article) {
+      return NextResponse.json(
+        { error: "Missing title or article" },
+        { status: 400 }
+      );
+    }
 
-  if (!res.ok) {
-    console.error("Failed to create comment", await res.text());
-    return new NextResponse("Failed to create comment", { status: 500 });
+    const created = await createComment({
+      title,
+      articleDocumentId: article, // documentId
+      authorDocumentId: author || null,
+    });
+
+    return NextResponse.json(created, { status: 201 });
+  } catch (err) {
+    console.error("Comments POST error:", err);
+    return NextResponse.json(
+      { error: "Failed to create comment" },
+      { status: 500 }
+    );
   }
-
-  const data = await res.json();
-  return NextResponse.json(data);
 }

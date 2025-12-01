@@ -1,38 +1,30 @@
-// lib/strapi/articles.js
 import { strapiFetch } from "./client";
 
-// Blog list
 export async function getArticles() {
   const res = await strapiFetch(
     "/api/articles",
     {
-      // ✅ ask to populate these relations (no "*")
-      "populate[0]": "cover",
-      "populate[1]": "author",
-      "populate[2]": "category",
+      populate: "*",
       sort: "createdAt:desc",
     },
     { next: { revalidate: 60 } }
   );
 
-  return res;
+  return res; // { data, meta }
 }
 
-// Single article by slug
-export async function getArticleBySlug(slug) {
+// single article by documentId
+export async function getArticleByDocumentId(documentId) {
   const res = await strapiFetch(
-    "/api/articles",
+    `/api/articles/${documentId}`,
     {
-      "filters[slug][$eq]": slug,
-
-      // ✅ only these relations; no "deep,3", no "*"
-      "populate[0]": "cover",
-      "populate[1]": "author",
-      "populate[2]": "category",
-      "populate[3]": "blocks",
+      populate: "*",
     },
-    { next: { revalidate: 60 } }
+    {
+      // next: { revalidate: 60 }
+      cache: "no-store",
+    }
   );
 
-  return res.data?.[0] || null;
+  return res.data || null;
 }

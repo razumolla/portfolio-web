@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 export default function BlogCard({ article }) {
-  const { title, description, slug, cover } = article;
+  const { title, description, documentId, cover } = article;
 
   const coverUrl =
     cover && cover.url
@@ -11,12 +11,11 @@ export default function BlogCard({ article }) {
 
   return (
     <Link
-      href={`/blog/${slug}`}
+      href={`/blogs/${documentId}`} // documentId in URL
       className="block rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow"
     >
       {coverUrl && (
         <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-          {/* you can switch to next/image later */}
           <img
             src={coverUrl}
             alt={title}

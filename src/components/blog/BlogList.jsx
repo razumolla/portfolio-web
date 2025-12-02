@@ -1,4 +1,4 @@
-import BlogCard from "./blog-card";
+import BlogCard from "./BlogCard";
 
 export default function BlogList({ articles }) {
   if (!articles || articles.length === 0) {

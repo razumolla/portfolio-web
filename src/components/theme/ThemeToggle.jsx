@@ -1,4 +1,3 @@
-// components/theme/theme-toggle.jsx
 "use client";
 
 import { useTheme } from "next-themes";

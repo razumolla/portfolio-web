@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Github, Linkedin, Mail } from "lucide-react";
 
-export default function SiteFooter() {
+export default function Footer() {
   const year = new Date().getFullYear();
 
   return (

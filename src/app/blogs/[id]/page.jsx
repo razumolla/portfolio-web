@@ -1,7 +1,6 @@
-// app/blog/[id]/page.jsx
 import { getArticles, getArticleByDocumentId } from "@/lib/strapi/articles";
-import BlogContent from "@/components/blog/blog-content";
-import CommentsSection from "@/components/blog/comments-section";
+import BlogContent from "@/components/blog/BlogContent";
+import CommentsSection from "@/components/blog/CommentsSection";
 import { notFound } from "next/navigation";
 
 const BlogDetailPage = async ({ params }) => {

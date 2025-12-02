@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
@@ -38,7 +38,7 @@ function NavLink({ href, label, onClick }) {
   );
 }
 
-export default function SiteHeader() {
+export default function Header() {
   const [open, setOpen] = useState(false);
 
   function toggleMenu() {

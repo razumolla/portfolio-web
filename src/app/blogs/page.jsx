@@ -1,4 +1,4 @@
-import BlogList from "@/components/blog/blog-list";
+import BlogList from "@/components/blog/BlogList";
 import { getArticles } from "@/lib/strapi/articles";
 
 export const metadata = {

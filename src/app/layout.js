@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <div className="min-h-screen bg-background text-foreground flex flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 max-w-7xl mx-auto">{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

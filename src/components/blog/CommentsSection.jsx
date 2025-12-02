@@ -15,7 +15,7 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:1337/api/comments?filters[article][documentId][$eq]=${articleId}`,
+        `http://localhost:1337/api/comments?filters[article][documentId][$eq]=${articleId}&populate=*`,
         {
           cache: "no-store",
         }

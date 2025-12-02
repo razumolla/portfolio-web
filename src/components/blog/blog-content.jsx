@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
+import MarkdownHTML from "../MarkdownHTML";
+
 export default function BlogContent({ article }) {
   const { title, description, cover, author, category, blocks, createdAt } =
     article;
@@ -17,7 +19,7 @@ export default function BlogContent({ article }) {
         <img
           src={coverUrl}
           alt={title}
-          className="w-full h-80 rounded-lg mb-6"
+          className="w-full h-80 rounded-lg mb-6 object-cover"
         />
       )}
 
@@ -31,16 +33,37 @@ export default function BlogContent({ article }) {
 
       {description && <p className="mb-6 text-lg">{description}</p>}
 
-      {/* basic blocks preview – you can replace with real renderers later */}
+      {/* Render Strapi blocks */}
       {blocks && blocks.length > 0 && (
         <div className="prose dark:prose-invert max-w-none space-y-6">
-          {blocks.map((block, idx) => (
-            <div key={idx}>
-              <code className="text-[11px] rounded bg-muted px-2 py-1">
-                {block.__component}
-              </code>
-            </div>
-          ))}
+          {blocks.map((block, idx) => {
+            switch (block.__component) {
+              case "shared.rich-text":
+                // markdown content from Strapi (usually in `body`)
+                return (
+                  <MarkdownHTML key={block.id ?? idx} markdown={block.body} />
+                );
+
+              case "shared.quote":
+                return (
+                  <blockquote
+                    key={block.id ?? idx}
+                    className="border-l-4 pl-4 italic text-muted-foreground"
+                  >
+                    <p>{block.body}</p>
+                    {block.title && (
+                      <cite className="block mt-2 text-xs not-italic">
+                        — {block.title}
+                      </cite>
+                    )}
+                  </blockquote>
+                );
+
+              // you can extend this later for sliders, images, etc.
+              default:
+                return null;
+            }
+          })}
         </div>
       )}
     </article>

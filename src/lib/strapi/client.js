@@ -1,4 +1,4 @@
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.STRAPI_URL;
 
 export async function strapiFetch(path, query = {}, init = {}) {
   const url = new URL(path, STRAPI_URL); // path must include /api

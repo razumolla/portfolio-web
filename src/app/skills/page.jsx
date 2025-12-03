@@ -1,9 +1,10 @@
+import SkillsSection from "@/components/skills/SkillsSection";
 import React from "react";
 
 const SkillsPage = () => {
   return (
     <div>
-      <h1>Skills Page</h1>
+      <SkillsSection />
     </div>
   );
 };

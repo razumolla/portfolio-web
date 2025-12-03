@@ -1,4 +1,3 @@
-// lib/strapi/comments.js
 import { strapiFetch } from "./client";
 
 // GET all comments for one article (by documentId)

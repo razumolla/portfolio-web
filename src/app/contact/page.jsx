@@ -1,11 +1,14 @@
-import React from "react";
+import Contact from "@/components/contact/Contact";
 
-const ContactPage = () => {
-  return (
-    <div>
-      <h1>Contact Page</h1>
-    </div>
-  );
+export const metadata = {
+  title: "Contact | Md. Razu Molla",
+  description: "Get in touch with Md. Razu Molla",
 };
 
-export default ContactPage;
+export default function ContactPage() {
+  return (
+    <div className="bg-background text-foreground">
+      <Contact />
+    </div>
+  );
+}

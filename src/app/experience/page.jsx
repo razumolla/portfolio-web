@@ -1,9 +1,10 @@
+import ExperienceSection from "@/components/experience/ExperienceSection";
 import React from "react";
 
 const ExperiencePage = () => {
   return (
     <div>
-      <h2>Experience Page</h2>
+      <ExperienceSection />
     </div>
   );
 };

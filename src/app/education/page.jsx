@@ -1,9 +1,9 @@
-import React from "react";
+import EducationSection from "@/components/education/EducationSection";
 
 const EducationPage = () => {
   return (
     <div>
-      <h1>Education Page</h1>
+      <EducationSection />
     </div>
   );
 };

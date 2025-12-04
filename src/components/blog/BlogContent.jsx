@@ -6,8 +6,9 @@ export default function BlogContent({ article }) {
   const { title, description, cover, author, category, blocks, createdAt } =
     article;
 
+  const STRAPI_URL = process.env.STRAPI_URL;
   const coverUrl =
-    cover && cover.url ? `http://localhost:1337${cover.url}` : null;
+    cover && cover.url ? `${STRAPI_URL}${cover.formats?.small?.url}` : null;
 
   const formattedDate = createdAt
     ? new Date(createdAt).toLocaleDateString()

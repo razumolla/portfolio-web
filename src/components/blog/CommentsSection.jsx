@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+const STRAPI_URL = process.env.STRAPI_URL;
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
@@ -15,7 +16,7 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:1337/api/comments?filters[article][documentId][$eq]=${articleId}&populate=*`,
+        `${STRAPI_URL}/api/comments?filters[article][documentId][$eq]=${articleId}&populate=*`,
         {
           cache: "no-store",
         }

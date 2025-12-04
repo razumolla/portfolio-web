@@ -10,6 +10,8 @@ export default async function ProjectsSection() {
   const { data } = await getProjects();
   const projects = data || [];
 
+  console.log("projects:", projects);
+
   if (!projects.length) return null;
 
   return (

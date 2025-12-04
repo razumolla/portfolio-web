@@ -4,10 +4,13 @@ import Link from "next/link";
 export default function BlogCard({ article }) {
   const { title, description, documentId, cover } = article;
 
+  const STRAPI_URL = process.env.STRAPI_URL;
   const coverUrl =
     cover && cover.url
-      ? `http://localhost:1337${cover.formats?.small?.url || cover.url}`
+      ? `${STRAPI_URL}${cover.formats?.small?.url || cover.url}`
       : null;
+
+  console.log("coverUrl:", coverUrl);
 
   return (
     <Link

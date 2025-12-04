@@ -25,8 +25,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 
-const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.STRAPI_URL;
 
 function Contact({ about }) {
   const [form, setForm] = useState({

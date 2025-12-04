@@ -47,7 +47,7 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
 
     setSubmitting(true);
 
-    await fetch("/api/comments", {
+    await fetch("/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

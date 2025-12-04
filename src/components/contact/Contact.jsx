@@ -23,21 +23,18 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { useAbout } from "@/hooks/useAbout";
 import { toast } from "sonner";
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337/api";
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-const Contact = () => {
-  const { about, loading: aboutLoading } = useAbout();
-
+function Contact({ about }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
     message: "",
   });
   const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState({ type: "", message: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +43,6 @@ const Contact = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setStatus({ type: "", message: "" });
 
     if (!form.name || !form.email || !form.message) {
       toast.error("Please fill in all fields.");
@@ -171,18 +167,6 @@ const Contact = () => {
                   />
                 </div>
 
-                {status.message && (
-                  <p
-                    className={`text-sm ${
-                      status.type === "success"
-                        ? "text-emerald-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {status.message}
-                  </p>
-                )}
-
                 <Button
                   type="submit"
                   disabled={submitting}
@@ -200,7 +184,7 @@ const Contact = () => {
               <CardHeader>
                 <CardTitle>Contact details</CardTitle>
                 <CardDescription>
-                  {aboutLoading
+                  {!about
                     ? "Loading your contact info..."
                     : "You can also reach me directly using the details below."}
                 </CardDescription>
@@ -293,7 +277,7 @@ const Contact = () => {
       </div>
     </section>
   );
-};
+}
 
 function InfoRow({ icon, label }) {
   return (

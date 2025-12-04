@@ -1,7 +1,7 @@
 const STRAPI_URL = process.env.STRAPI_URL;
 
 export async function strapiFetch(path, query = {}, init = {}) {
-  const url = new URL(path, STRAPI_URL); // path must include /api
+  const url = new URL(path, STRAPI_URL);
 
   Object.entries(query).forEach(([key, value]) => {
     url.searchParams.set(key, value);

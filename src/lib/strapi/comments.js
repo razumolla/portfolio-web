@@ -42,5 +42,5 @@ export async function createComment({
     }
   );
 
-  return res; // created comment
+  return res;
 }

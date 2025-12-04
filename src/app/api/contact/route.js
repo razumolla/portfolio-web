@@ -1,1 +1,0 @@
-// POST -> Strapi contact messages

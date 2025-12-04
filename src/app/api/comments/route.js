@@ -1,4 +1,3 @@
-// app/api/comments/route.js
 import { NextResponse } from "next/server";
 import { getCommentsForArticle, createComment } from "@/lib/strapi/comments";
 

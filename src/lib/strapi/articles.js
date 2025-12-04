@@ -10,7 +10,7 @@ export async function getArticles() {
     { next: { revalidate: 60 } }
   );
 
-  return res; // { data, meta }
+  return res;
 }
 
 // single article by documentId
@@ -21,7 +21,6 @@ export async function getArticleByDocumentId(documentId) {
       populate: "*",
     },
     {
-      // next: { revalidate: 60 }
       cache: "no-store",
     }
   );

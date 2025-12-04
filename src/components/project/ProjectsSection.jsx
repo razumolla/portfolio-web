@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { getProjects } from "@/lib/strapi/projects";
 
-const STRAPI_URL = process.env.STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.STRAPI_URL;
 
 export default async function ProjectsSection() {
   const { data } = await getProjects();

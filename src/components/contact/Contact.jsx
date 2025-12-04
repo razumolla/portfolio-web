@@ -107,7 +107,7 @@ const Contact = () => {
 
   return (
     <section className="min-h-[calc(100vh-80px)] bg-background py-16">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.3fr)] items-start">
           {/* LEFT: CONTACT FORM */}
           <Card className="bg-muted/40 border-border/60">

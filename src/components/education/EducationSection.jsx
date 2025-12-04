@@ -47,12 +47,12 @@ export default async function EducationSection() {
 
   return (
     <section id="education" className="py-16 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
             Academic background
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-muted-foreground max-w-4xl mx-auto">
             A quick overview of my formal education and academic milestones.
           </p>
         </div>

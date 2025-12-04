@@ -1,27 +1,25 @@
 const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
 
 export async function strapiFetch(path, query = {}, init = {}) {
   const url = new URL(path, STRAPI_URL);
 
-  Object.entries(query).forEach(([key, value]) => {
-    url.searchParams.set(key, value);
-  });
-
-  console.log("Strapi request URL:", url.toString());
+  Object.entries(query).forEach(([k, v]) => url.searchParams.set(k, String(v)));
 
   const res = await fetch(url.toString(), {
     ...init,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${STRAPI_TOKEN}`,
       ...(init.headers || {}),
     },
   });
 
   if (!res.ok) {
-    const errorBody = await res.text();
-    console.error("Strapi error:", res.status, res.statusText, errorBody);
+    const body = await res.text();
+    console.error("Strapi error:", res.status, res.statusText, body);
     throw new Error(
-      `Strapi request failed: ${res.status} ${res.statusText} - ${errorBody}`
+      `Strapi request failed: ${res.status} ${res.statusText} - ${body}`
     );
   }
 

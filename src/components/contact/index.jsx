@@ -1,3 +1,4 @@
+import { getAbout } from "@/lib/strapi/about";
 import Contact from "./Contact";
 
 const ContactIndex = async () => {

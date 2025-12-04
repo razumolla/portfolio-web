@@ -51,13 +51,7 @@ export default async function ExperienceSection() {
     <section id="experience" className="py-16 bg-background">
       <div className="container mx-auto">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Professional experience
-          </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-            A quick timeline of my work as a developer, from early roles to my
-            current position.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Experience</h2>
         </div>
 
         <div className="max-w-3xl mx-auto">

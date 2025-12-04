@@ -54,15 +54,10 @@ export default function Header() {
       <div className="container mx-auto flex h-14 items-center justify-between gap-4">
         {/* Left: Logo / Brand */}
         <Link href="/" className="flex items-center gap-2" onClick={closeMenu}>
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">
-            R
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-2xl font-bold">
+            RS
           </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold">Razu Molla</span>
-            <span className="text-[11px] text-muted-foreground">
-              Frontend Engineer
-            </span>
-          </div>
+          <span className="text-3xl font-semibold">Razu Molla</span>
         </Link>
 
         {/* Desktop nav */}

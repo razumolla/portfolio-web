@@ -14,13 +14,7 @@ export default async function SkillsSection() {
     <section id="skills" className="py-16 bg-background">
       <div className="container mx-auto">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Technologies I work with
-          </h2>
-          <p className="text-sm md:text-base text-muted-foreground mx-auto">
-            A quick snapshot of the tools and technologies I use day-to-day to
-            build modern, performant web applications.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Skills</h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-6">

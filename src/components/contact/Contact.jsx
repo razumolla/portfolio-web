@@ -25,8 +25,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 
-const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 function Contact({ about }) {
   const [form, setForm] = useState({
@@ -104,20 +103,21 @@ function Contact({ about }) {
   return (
     <section className="min-h-[calc(100vh-80px)] bg-background py-16">
       <div className="container mx-auto">
+        <div className="mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">
+            Contact with Me
+          </h2>
+        </div>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.3fr)] items-start">
           {/* LEFT: CONTACT FORM */}
           <Card className="bg-muted/40 border-border/60">
             <CardHeader>
-              <p className="text-xs uppercase tracking-[0.2em] text-primary mb-1">
-                Contact with me
-              </p>
               <CardTitle className="text-2xl md:text-3xl font-bold">
                 Let&apos;s build something together
               </CardTitle>
               <CardDescription className="text-sm md:text-base">
                 If you have any questions or want to discuss a project or job
-                opportunity, just drop a message. I usually reply within 24–48
-                hours.
+                opportunity, just drop a message.
               </CardDescription>
             </CardHeader>
 

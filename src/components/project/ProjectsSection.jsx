@@ -16,13 +16,7 @@ export default async function ProjectsSection() {
     <section id="projects" className="py-16 bg-background">
       <div className="container mx-auto">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            My Top Selected work
-          </h2>
-          <p className="text-sm md:text-base text-muted-foreground mx-auto">
-            A collection of projects where I focused on building real-world,
-            production-ready frontend experiences.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Latest work</h2>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

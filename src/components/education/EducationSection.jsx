@@ -50,11 +50,8 @@ export default async function EducationSection() {
       <div className="container mx-auto">
         <div className="mb-10 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3">
-            Academic background
+            Academic Background
           </h2>
-          <p className="text-sm md:text-base text-muted-foreground max-w-4xl mx-auto">
-            A quick overview of my formal education and academic milestones.
-          </p>
         </div>
 
         <div className="max-w-3xl mx-auto">

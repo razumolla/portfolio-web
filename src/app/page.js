@@ -2,19 +2,24 @@ import Contact from "@/components/contact/Contact";
 import EducationSection from "@/components/education/EducationSection";
 import ExperienceSection from "@/components/experience/ExperienceSection";
 import ProjectsSection from "@/components/project/ProjectsSection";
-import Hero from "@/components/sections/Hero";
+import AboutSection from "@/components/sections/AboutSection";
+import HeroSection from "@/components/sections/Hero";
 import SkillsSection from "@/components/skills/SkillsSection";
+import { getAbout } from "@/lib/strapi/about";
 
-export default function Home() {
+export default async function Home() {
+  const { data: about } = await getAbout();
+
   return (
     <div>
       <main>
-        {/* <Hero /> */}
+        <HeroSection about={about} />
+        <AboutSection about={about} />
         <ProjectsSection />
         <ExperienceSection />
         <EducationSection />
         <SkillsSection />
-        <Contact />
+        <Contact about={about} />
       </main>
     </div>
   );

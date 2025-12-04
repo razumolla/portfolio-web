@@ -15,10 +15,10 @@ export default async function Home() {
       <main>
         <HeroSection about={about} />
         <AboutSection about={about} />
+        <SkillsSection />
         <ProjectsSection />
         <ExperienceSection />
         <EducationSection />
-        <SkillsSection />
         <Contact about={about} />
       </main>
     </div>

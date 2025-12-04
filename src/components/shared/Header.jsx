@@ -61,7 +61,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-end gap-6">
           {navItems.map((item) => (
             <NavLink key={item.href} href={item.href} label={item.label} />
           ))}

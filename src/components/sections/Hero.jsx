@@ -10,7 +10,8 @@ import {
   Mail,
 } from "lucide-react";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 export default function HeroSection({ about }) {
   const name = about?.name ?? "Md. Razu Molla";
@@ -26,18 +27,10 @@ export default function HeroSection({ about }) {
     hackerrank: about?.hackerrank,
   };
 
-  const heroImage = about?.heroImage;
-  const heroImageUrl = heroImage
-    ? `${STRAPI_URL}${
-        heroImage.formats?.large?.url ||
-        heroImage.formats?.medium?.url ||
-        heroImage.url
-      }`
-    : null;
-
+  // If you want to use the file from Strapi instead of a custom link:
   const resumeUrl = about?.resume?.url
     ? `${STRAPI_URL}${about.resume.url}`
-    : null;
+    : about?.resumeLink;
 
   return (
     <section className="relative overflow-hidden bg-linear-to-b from-background via-background to-background/95 py-16 md:py-20">
@@ -55,8 +48,9 @@ export default function HeroSection({ about }) {
                 passionate about crafting Software Solutions.
               </span>
             </h1>
+
             {/* Social icons */}
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex flex-wrap gap-3 pt-4">
               {socials.github && (
                 <SocialIcon href={socials.github} label="GitHub">
                   <Github className="h-5 w-5" />
@@ -80,7 +74,7 @@ export default function HeroSection({ about }) {
             </div>
 
             {/* CTA buttons */}
-            <div className="flex flex-wrap gap-4 pt-4">
+            <div className="flex flex-wrap gap-4 pt-6">
               <Button variant="outline" asChild className="px-6 py-2">
                 <Link href="/contact">
                   <Mail className="mr-2 h-4 w-4" />
@@ -89,17 +83,13 @@ export default function HeroSection({ about }) {
               </Button>
 
               {resumeUrl && (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="border-pink-500/70 bg-linear-to-r from-pink-500/20 to-purple-500/20 px-6 py-2"
-                >
+                <Button asChild variant="primary">
                   <Link
                     href={resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Download className="mr-2 h-4 w-4" />
+                    <Download className="mr-1 h-4 w-4" />
                     Get Resume
                   </Link>
                 </Button>
@@ -107,7 +97,7 @@ export default function HeroSection({ about }) {
             </div>
           </div>
 
-          {/* RIGHT: Code-style card / hero image */}
+          {/* RIGHT: Code-style card */}
           <Card className="relative bg-linear-to-br from-slate-900/70 to-slate-900/90 border-slate-700 shadow-xl">
             <CardHeader className="border-b border-slate-700/60 pb-3">
               <div className="flex items-center gap-2">
@@ -121,24 +111,22 @@ export default function HeroSection({ about }) {
             </CardHeader>
 
             <CardContent className="pt-4">
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-center">
+              <div className="grid items-center">
                 {/* fake code */}
-                <pre className="font-mono text-xs md:text-sm text-slate-200/90 whitespace-pre-wrap">
+                <pre className="font-mono text-xs md:text-sm text-slate-200/90 whitespace-pre overflow-x-auto">
                   {`const coder = {
   name: '${name}',
   role: '${designation}',
   skills: {
     core: ['JavaScript', 'TypeScript'],
-    frontend: ['React', 'Next.js'], 
+    frontend: ['React', 'Next.js'],
     backend: ['Node.js', 'Express'],
     database: ['PostgreSQL', 'MongoDB', 'MySQL'],
   },
   hardWorker: true,
   quickLearner: true,
   problemSolver: true,
-}; 
-
-`}
+};`}
                 </pre>
               </div>
             </CardContent>

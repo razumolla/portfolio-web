@@ -25,7 +25,8 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 function Contact({ about }) {
   const [form, setForm] = useState({
@@ -34,6 +35,7 @@ function Contact({ about }) {
     message: "",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [touched, setTouched] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,16 +44,17 @@ function Contact({ about }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setTouched(true);
 
     if (!form.name || !form.email || !form.message) {
-      toast.error("Please fill in all fields.");
+      toast.error("All fields are required.");
       return;
     }
 
     try {
       setSubmitting(true);
 
-      const res = await fetch(`${STRAPI_URL}/contacts`, {
+      const res = await fetch(`${STRAPI_URL}/api/contacts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,6 +80,7 @@ function Contact({ about }) {
       });
 
       setForm({ name: "", email: "", message: "" });
+      setTouched(false);
     } catch (err) {
       console.error("Contact submit error:", err);
       toast.error("Something went wrong.", {
@@ -96,36 +100,34 @@ function Contact({ about }) {
     facebook: about?.facebook,
     hackerrank: about?.hackerrank,
   };
-  const resumeUrl = about?.resume?.url
-    ? `${STRAPI_URL}${about.resume.url}`
-    : null;
+  const resumeLink = about?.resumeLink;
+
+  const hasError = (field) => touched && !form[field];
 
   return (
-    <section className="min-h-[calc(100vh-80px)] bg-background py-16">
-      <div className="container mx-auto">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Contact with Me
-          </h2>
+    <section className=" bg-background py-16">
+      <div className="container mx-auto px-4">
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold">Contact Me</h2>
         </div>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.3fr)] items-start">
+
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.3fr)] items-start">
           {/* LEFT: CONTACT FORM */}
           <Card className="bg-muted/40 border-border/60">
             <CardHeader>
-              <CardTitle className="text-2xl md:text-3xl font-bold">
-                Let&apos;s build something together
+              <CardTitle className="text-xl md:text-2xl">
+                Send a message
               </CardTitle>
-              <CardDescription className="text-sm md:text-base">
-                If you have any questions or want to discuss a project or job
-                opportunity, just drop a message.
+              <CardDescription>
+                I usually reply within 24–48 hours.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Your Name
+                    Your Name <span className="text-red-500">*</span>
                   </label>
                   <Input
                     name="name"
@@ -133,13 +135,17 @@ function Contact({ about }) {
                     value={form.name}
                     onChange={handleChange}
                     disabled={submitting}
-                    className="bg-background/60"
+                    required
+                    aria-invalid={hasError("name")}
+                    className={`bg-background/60 ${
+                      hasError("name") ? "border-red-500" : ""
+                    }`}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Your Email
+                    Your Email <span className="text-red-500">*</span>
                   </label>
                   <Input
                     name="email"
@@ -148,13 +154,17 @@ function Contact({ about }) {
                     value={form.email}
                     onChange={handleChange}
                     disabled={submitting}
-                    className="bg-background/60"
+                    required
+                    aria-invalid={hasError("email")}
+                    className={`bg-background/60 ${
+                      hasError("email") ? "border-red-500" : ""
+                    }`}
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    Your Message
+                    Your Message <span className="text-red-500">*</span>
                   </label>
                   <Textarea
                     name="message"
@@ -163,7 +173,11 @@ function Contact({ about }) {
                     value={form.message}
                     onChange={handleChange}
                     disabled={submitting}
-                    className="bg-background/60 resize-none"
+                    required
+                    aria-invalid={hasError("message")}
+                    className={`bg-background/60 resize-none ${
+                      hasError("message") ? "border-red-500" : ""
+                    }`}
                   />
                 </div>
 
@@ -178,15 +192,13 @@ function Contact({ about }) {
             </CardContent>
           </Card>
 
-          {/* RIGHT: ABOUT / CONTACT INFO */}
-          <div className="space-y-6">
+          {/* RIGHT: CONTACT INFO / SOCIALS */}
+          <div className="space-y-4">
             <Card className="bg-muted/40 border-border/60">
               <CardHeader>
                 <CardTitle>Contact details</CardTitle>
                 <CardDescription>
-                  {!about
-                    ? "Loading your contact info..."
-                    : "You can also reach me directly using the details below."}
+                  You can also reach me directly.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -225,15 +237,15 @@ function Contact({ about }) {
                   />
                 )}
 
-                {resumeUrl && (
+                {resumeLink && (
                   <InfoRow
                     icon={<FileText className="h-5 w-5 text-primary" />}
                     label={
                       <Link
-                        href={resumeUrl}
+                        href={resumeLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary transition-colors "
                       >
                         Download Resume
                       </Link>
@@ -244,9 +256,6 @@ function Contact({ about }) {
             </Card>
 
             <Card className="bg-muted/40 border-border/60">
-              <CardHeader>
-                <CardTitle>Find me online</CardTitle>
-              </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-4">
                   {socials.github && (

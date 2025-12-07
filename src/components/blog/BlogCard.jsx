@@ -10,8 +10,6 @@ export default function BlogCard({ article }) {
       ? `${STRAPI_URL}${cover.formats?.small?.url || cover.url}`
       : null;
 
-  console.log("coverUrl:", coverUrl);
-
   return (
     <Link
       href={`/blogs/${documentId}`} // documentId in URL

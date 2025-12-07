@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { getEducations } from "@/lib/strapi/education";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 // just the path part from your URL
 const EDUCATION_IMAGE_PATH = "/uploads/education_693b76c631.avif";

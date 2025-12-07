@@ -6,7 +6,7 @@ export default function BlogContent({ article }) {
   const { title, description, cover, author, category, blocks, createdAt } =
     article;
 
-  const STRAPI_URL = process.env.STRAPI_URL;
+  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
   const coverUrl =
     cover && cover.url ? `${STRAPI_URL}${cover.formats?.small?.url}` : null;
 

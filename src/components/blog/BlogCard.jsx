@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function BlogCard({ article }) {
   const { title, description, documentId, cover } = article;
 
-  const STRAPI_URL = process.env.STRAPI_URL;
+  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
   const coverUrl =
     cover && cover.url
       ? `${STRAPI_URL}${cover.formats?.small?.url || cover.url}`

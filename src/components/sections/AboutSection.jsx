@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 export default function AboutSection({ about }) {
   const description = about?.description;

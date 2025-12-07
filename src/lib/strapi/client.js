@@ -1,5 +1,5 @@
-const STRAPI_URL = process.env.STRAPI_URL;
-const STRAPI_TOKEN = process.env.STRAPI_TOKEN;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
+const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
 export async function strapiFetch(path, query = {}, init = {}) {
   const url = new URL(path, STRAPI_URL);

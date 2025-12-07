@@ -2,7 +2,7 @@
 
 import { getSkills } from "@/lib/strapi/skills";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 export default async function SkillsSection() {
   const { data } = await getSkills();

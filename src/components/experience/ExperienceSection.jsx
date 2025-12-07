@@ -2,7 +2,7 @@
 
 import { getExperiences } from "@/lib/strapi/experiences";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 // just the path part from your URL
 const EXPERIENCE_IMAGE_PATH = "/uploads/experience_45d5c43255.jpg";

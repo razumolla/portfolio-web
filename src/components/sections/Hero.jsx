@@ -10,7 +10,7 @@ import {
   Mail,
 } from "lucide-react";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 
 export default function HeroSection({ about }) {
   const name = about?.name ?? "Md. Razu Molla";

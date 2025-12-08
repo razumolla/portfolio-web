@@ -1,28 +1,27 @@
 // app/connect/[provider]/redirect/route.js
 
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 const cookieConfig = {
   maxAge: 60 * 60 * 24 * 7, // 1 week
   path: "/",
-  // domain is optional in dev; if it causes issues, remove this line
-  domain: process.env.HOST ?? "localhost",
+  // Remove domain to avoid issues between localhost and production
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
 };
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request, { params }) {
-  // 🔹 unwrap dynamic params (Next.js 16)
+  // In Next 16, params may be a Promise; await works either way
   const { provider } = await params;
 
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("access_token");
 
   if (!token) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   const backendUrl =
@@ -40,15 +39,19 @@ export async function GET(request, { params }) {
   if (!res.ok) {
     const body = await res.text();
     console.error("Strapi auth callback failed:", res.status, body);
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   const data = await res.json();
 
-  // 🔹 cookies() is also async in Next 16
-  const cookieStore = await cookies();
-  cookieStore.set("jwt", data.jwt, cookieConfig);
+  if (!data.jwt) {
+    console.error("No JWT returned from Strapi auth callback:", data);
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
-  // go to private route
-  return NextResponse.redirect(new URL("/dashboard", request.url));
+  // ✅ Create the redirect response and set the cookie ON THAT RESPONSE
+  const response = NextResponse.redirect(new URL("/dashboard", request.url));
+  response.cookies.set("jwt", data.jwt, cookieConfig);
+
+  return response;
 }

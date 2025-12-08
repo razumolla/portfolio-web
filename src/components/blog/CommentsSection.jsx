@@ -122,15 +122,30 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
             return (
               <div
                 key={comment.id}
-                className="rounded border bg-card p-3 text-sm"
+                className="flex gap-3 rounded-xl border bg-card/60 p-4 shadow-sm transition hover:shadow-md"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium">{authorName}</span>
-                  <span className="text-[11px] text-muted-foreground">
-                    {new Date(comment.createdAt).toLocaleString()}
-                  </span>
+                {/* Avatar */}
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {authorName?.[0]?.toUpperCase() ?? "U"}
                 </div>
-                <p className="mt-2">{comment.title}</p>
+
+                {/* Content */}
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-row items-center gap-2">
+                      <span className="text-sm font-semibold leading-tight">
+                        {authorName}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-sm leading-relaxed text-foreground/90">
+                    {comment.title}
+                  </p>
+                </div>
               </div>
             );
           })}

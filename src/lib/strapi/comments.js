@@ -6,7 +6,7 @@ export async function getCommentsForArticle(articleDocumentId) {
     "/api/comments",
     {
       "filters[article][documentId][$eq]": articleDocumentId,
-      "populate[author]": "*",
+      "populate[users_permissions_user]": "*", // ⬅️ relation field
       "populate[article]": "*",
       sort: "createdAt:asc",
     },
@@ -20,18 +20,15 @@ export async function getCommentsForArticle(articleDocumentId) {
 export async function createComment({
   title,
   articleDocumentId,
-  authorDocumentId,
+  userDocumentId,
 }) {
   const body = {
     data: {
       title,
-      article: articleDocumentId, // same as your Postman example
+      article: articleDocumentId, // article.documentId
+      users_permissions_user: userDocumentId, // Strapi relation field
     },
   };
-
-  if (authorDocumentId) {
-    body.data.author = authorDocumentId;
-  }
 
   const res = await strapiFetch(
     "/api/comments",

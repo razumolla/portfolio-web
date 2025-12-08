@@ -1,10 +1,12 @@
+// src/app/api/comments/route.js
 import { NextResponse } from "next/server";
-import { getCommentsForArticle, createComment } from "@/lib/strapi/comments";
+import { cookies } from "next/headers";
+import { createComment, getCommentsForArticle } from "@/lib/strapi/comments";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const articleId = searchParams.get("articleId"); // this is article.documentId
+    const articleId = searchParams.get("articleId"); // article.documentId
 
     if (!articleId) {
       return NextResponse.json({ data: [] });
@@ -24,20 +26,27 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { title, article, author } = body;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("jwt")?.value;
 
-    if (!title || !article) {
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { title, article, userDocumentId } = body;
+
+    if (!title || !article || !userDocumentId) {
       return NextResponse.json(
-        { error: "Missing title or article" },
+        { error: "Missing title, article, or userDocumentId" },
         { status: 400 }
       );
     }
 
     const created = await createComment({
       title,
-      articleDocumentId: article, // documentId
-      authorDocumentId: author || null,
+      articleDocumentId: article,
+      userDocumentId, // will map to users_permissions_user
     });
 
     return NextResponse.json(created, { status: 201 });

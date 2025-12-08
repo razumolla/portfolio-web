@@ -3,6 +3,7 @@
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 
 export default function CommentsSection({ articleId, initialComments = [] }) {
@@ -10,6 +11,27 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
   const [loading, setLoading] = useState(!initialComments.length);
   const [body, setBody] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const [user, setUser] = useState(null);
+  const [checkingUser, setCheckingUser] = useState(true);
+
+  // 🔹 load logged-in user
+  async function loadUser() {
+    try {
+      const res = await fetch("/api/me", { cache: "no-store" });
+      if (!res.ok) {
+        setUser(null);
+        return;
+      }
+      const json = await res.json();
+      setUser(json.user || null);
+    } catch (err) {
+      console.error("GET /api/me error", err);
+      setUser(null);
+    } finally {
+      setCheckingUser(false);
+    }
+  }
 
   async function loadComments() {
     try {
@@ -39,6 +61,10 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
   }
 
   useEffect(() => {
+    loadUser();
+  }, []);
+
+  useEffect(() => {
     loadComments();
   }, [articleId]);
 
@@ -46,17 +72,29 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
     e.preventDefault();
     if (!body.trim()) return;
 
+    if (!user) {
+      // optionally redirect to login
+      return;
+    }
+
+    const userDocumentId = user.documentId ?? user.id;
+
     setSubmitting(true);
 
-    await fetch("/comments", {
+    const res = await fetch("/api/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: body.trim(),
-        article: articleId, // documentId
-        // author: "<authorDocumentId>" // later if you want
+        article: articleId, // article.documentId
+        userDocumentId, // our own name; backend maps to users_permissions_user
       }),
     });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error("Create comment failed", res.status, err);
+    }
 
     setBody("");
     setSubmitting(false);
@@ -67,7 +105,6 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
     <section className="mt-12 max-w-5xl mx-auto border-t pt-8">
       <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
-      {/* list */}
       {loading ? (
         <p>Loading comments...</p>
       ) : comments.length === 0 ? (
@@ -75,7 +112,12 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
       ) : (
         <div className="space-y-4 mb-8">
           {comments.map((comment) => {
-            const authorName = comment.author?.name || "AnonymousUser";
+            // from Strapi response you pasted
+            const author =
+              comment.users_permissions_user ||
+              comment.users_permissions_user_id;
+            const authorName =
+              author?.username || author?.email || "AnonymousUser";
 
             return (
               <div
@@ -95,27 +137,36 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
         </div>
       )}
 
-      {/* form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <label className="block text-sm font-medium">
-          Add a comment
-          <textarea
-            placeholder="Write something nice..."
-            className="mt-1 w-full rounded border bg-background px-3 py-2 text-sm min-h-[100px]"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            required
-          />
-        </label>
+      {checkingUser ? null : user ? (
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <label className="block text-sm font-medium">
+            Add a comment
+            <textarea
+              placeholder="Write something nice..."
+              className="mt-1 w-full rounded border bg-background px-3 py-2 text-sm min-h-[100px]"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              required
+            />
+          </label>
 
-        <Button
-          type="submit"
-          disabled={submitting}
-          className="inline-flex items-center rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60 cursor-pointer"
-        >
-          {submitting ? "Posting..." : "Post comment"}
-        </Button>
-      </form>
+          <Button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex items-center rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-60 cursor-pointer"
+          >
+            {submitting ? "Posting..." : "Post comment"}
+          </Button>
+        </form>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          You need to{" "}
+          <Link href="/login" className="underline">
+            sign in
+          </Link>{" "}
+          to add a comment.
+        </p>
+      )}
     </section>
   );
 }

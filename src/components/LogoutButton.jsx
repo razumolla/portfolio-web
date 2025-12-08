@@ -4,20 +4,25 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const cookieConfig = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
+  maxAge: 60 * 60 * 24 * 7, // 1 week (for login)
   path: "/",
-  domain: process.env.HOST ?? "localhost",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
 };
 
 async function logoutAction() {
   "use server";
 
-  const cookieStore = await cookies(); // await
-  cookieStore.set("jwt", "", { ...cookieConfig, maxAge: 0 });
+  const cookieStore = await cookies();
 
-  redirect("/");
+  // Option 1: delete API (simplest & clean)
+  cookieStore.delete("jwt");
+
+  // Option 2 (alternative): overwrite with expired cookie
+  // cookieStore.set("jwt", "", { ...cookieConfig, maxAge: 0 });
+
+  redirect("/login");
 }
 
 export function LogoutButton() {

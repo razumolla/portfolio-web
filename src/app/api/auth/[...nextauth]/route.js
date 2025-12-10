@@ -1,7 +1,8 @@
+// src/app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { cookies } from "next/headers";
 
-// Configuration for NextAuth
 export const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -13,27 +14,49 @@ export const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
+    async signIn({ user, account }) {
+      // Return true to allow sign in
+      return true;
+    },
     async session({ session, token }) {
       if (token) {
         session.jwt = token.jwt;
         session.id = token.id;
+        session.user = token.user;
       }
       return session;
     },
-    async jwt({ token, account, user }) {
+    async jwt({ token, user, account }) {
       if (account && user) {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/auth/${account.provider}/callback?access_token=${account.access_token}`
+            `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/google/callback?access_token=${account.access_token}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
           );
+
+          if (!response.ok) {
+            console.error(`Strapi auth failed with status: ${response.status}`);
+            const errorText = await response.text();
+            console.error("Error response:", errorText);
+            return token;
+          }
+
           const data = await response.json();
+          console.log("Strapi auth response:", data);
 
-          console.log("data ****", data);
-
-          if (data && data.user) {
+          if (data.jwt && data.user) {
             token.jwt = data.jwt;
-            token.id = data.user.id; // Ensure that data.user exists
+            token.id = data.user.id;
+            token.user = data.user;
           } else {
             console.error("User data is missing in the response:", data);
           }
@@ -46,4 +69,4 @@ export const handler = NextAuth({
   },
 });
 
-export { handler as GET, handler as POST }; // Handles GET and POST requests for NextAuth
+export { handler as GET, handler as POST };

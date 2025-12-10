@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import NextAuthProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,9 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <div className="min-h-screen bg-background text-foreground flex flex-col px-4">
             <Header />
-            <main className="flex-1 ">{children}</main>
+            <main className="flex-1 ">
+              <NextAuthProvider>{children}</NextAuthProvider>
+            </main>
             <Footer />
           </div>
         </ThemeProvider>

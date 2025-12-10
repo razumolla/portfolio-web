@@ -33,6 +33,8 @@ export default function CommentsSection({ articleId, initialComments = [] }) {
     }
   }
 
+  console.log("user", user);
+
   async function loadComments() {
     try {
       setLoading(true);

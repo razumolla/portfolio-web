@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // ./src/app/login/page.jsx
+import GoogleSignUp from "@/components/auth/Google";
 import Link from "next/link";
 
 export default function Home() {
@@ -51,6 +52,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* GoogleSignUp */}
+      <GoogleSignUp />
     </div>
   );
 }
